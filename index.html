@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>受付 LIFF</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+</head>
+<body>
+  <p>受付フォームに移動します…</p>
+  <script>
+    (async () => {
+      const LIFF_ID = '2008112263-Dzz98Vkk';        // ← ここをLINE Developersで取得した LIFF ID に差替え
+      const FORM_URL = 'https://docs.google.com/forms/d/e/XXXXXXXXXXX/viewform'; // ← あとで差替え
+      const ENTRY_KEY_FOR_LINEID = 'entry.1234567890'; // ← フォームで得た entry.xxxx に差替え
+
+      await liff.init({ liffId: LIFF_ID });
+
+      if (!liff.isInClient()) {
+        alert('この受付はLINEアプリ内で開いてください。');
+      }
+
+      try {
+        const profile = await liff.getProfile();
+        const userId = profile.userId;
+        // フォームの prefilled URL を作成して遷移
+        const prefilled = `${FORM_URL}?usp=pp_url&${ENTRY_KEY_FOR_LINEID}=${encodeURIComponent(userId)}`;
+        window.location.href = prefilled;
+      } catch (err) {
+        console.error(err);
+        alert('ユーザー情報の取得に失敗しました。LINEアプリで開いているか確認してください。');
+      }
+    })();
+  </script>
+</body>
+</html>
